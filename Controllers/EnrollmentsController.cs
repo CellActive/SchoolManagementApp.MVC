@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -24,6 +25,7 @@ namespace SchoolManagementApp.MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var schoolManagementDbContext = _context.Enrollments.Include(e => e.Class).Include(e => e.Student);
+
             return View(await schoolManagementDbContext.ToListAsync());
         }
 
@@ -39,6 +41,7 @@ namespace SchoolManagementApp.MVC.Controllers
                 .Include(e => e.Class)
                 .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (enrollment == null)
             {
                 return NotFound();
@@ -140,6 +143,7 @@ namespace SchoolManagementApp.MVC.Controllers
                 .Include(e => e.Class)
                 .Include(e => e.Student)
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (enrollment == null)
             {
                 return NotFound();
@@ -162,14 +166,14 @@ namespace SchoolManagementApp.MVC.Controllers
             {
                 _context.Enrollments.Remove(enrollment);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool EnrollmentExists(int id)
         {
-          return (_context.Enrollments?.Any(e => e.Id == id)).GetValueOrDefault();
+            return (_context.Enrollments?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }
